@@ -23,9 +23,15 @@
 module Single_Cycle_Top(
 			input 	      clk,reset,
 			output [31:0] WriteData,DataAddr,
-			output 	      MemWrite );
+			output 	      MemWrite,
+			output        Halt,      // HALT signal for clean program termination
+			output [31:0] PC_Out     // PC output for debugging/monitoring
+			);
 
    wire [31:0] 			      PC, Instr, ReadData;
+
+   // Expose PC to output for monitoring
+   assign PC_Out = PC;
 
    Single_Cycle_Core core_top (
 			       .clk(clk),
@@ -35,7 +41,9 @@ module Single_Cycle_Top(
 			       .PC(PC),
 			       .MemWrite(MemWrite),
 			       .ALUResult(DataAddr),
-			       .WriteData(WriteData) );
+			       .WriteData(WriteData),
+			       .HaltOut(Halt)         // Connect HALT signal
+			       );
 
    Instruction_Memory Instr_Memory ( 
 				     .A(PC),

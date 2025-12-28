@@ -44,7 +44,18 @@ module Main_Decoder(
         7'b0110111: control_signals = 11'b1_00_1_0_00_0_11_0;//U-type lui
         7'b0010111: control_signals = 11'b1_00_1_0_00_0_01_0;// U-type AUIPC
         
-        7'b0000000: control_signals = 11'b0_00_0_0_00_0_00_0;//reset conditionm
+        7'b0000000: control_signals = 11'b0_00_0_0_00_0_00_0;//reset condition
+        7'b1110011: control_signals = 11'b0_00_0_0_00_0_00_0; // ECALL = HALT
+        
+        // =====================================================================
+        // PHASE 3: CRYPTO EXTENSIONS - Custom Opcode
+        // =====================================================================
+        // Custom opcode 0001011 (custom-0) for crypto instructions:
+        //   - ROTL (funct3=010): Rotate Left
+        //   - ROTR (funct3=011): Rotate Right  
+        //   - RNG  (funct3=100): Random Number Generator
+        // =====================================================================
+        7'b0001011: control_signals = 11'b1_xx_0_0_00_0_10_0; // Custom crypto R-type
 
        default:    control_signals = 11'bx_xx_x_x_xx_x_xx_x;
      endcase

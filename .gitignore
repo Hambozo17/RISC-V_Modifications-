@@ -1,0 +1,57 @@
+# Vivado Project Files
+*.jou
+*.log
+*.str
+*.xpr
+*.xml
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.cache/
+*.hbs
+*.wdb
+*.pb
+*.dcp
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.toc
+*.synctex.gz
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Backup files
+*.backup
+*.bak
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# Temporary files
+*.tmp
+*.temp
+texput.*

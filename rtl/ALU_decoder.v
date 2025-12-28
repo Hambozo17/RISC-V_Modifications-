@@ -36,22 +36,27 @@ module ALU_Decoder(
 	case(ALUOp)
           2'b00:  ALUControl = 4'b0000; //addition
           2'b01:  ALUControl = 4'b0001; //subtraction or auipc
-          2'b10: //ALUOp = 2'b10 and beyond
-            case(funct3)//R-type or I-type ALU
+          2'b10: //ALUOp = 2'b10 - R-type, I-type ALU, and Custom Crypto
+            case(funct3)
               3'b000:    
                 if (RtypeSub) ALUControl = 4'b0001; //sub
                 else ALUControl = 4'b0000; //add,addi
-                3'b001: ALUControl = 4'b1010; // sll, slli;
-              3'b010: ALUControl = 4'b0101; //slt,slti
-              3'b011: ALUControl = 4'b0110; //sltu, sltui
-              3'b100: ALUControl = 4'b0100; //xor
+              3'b001: ALUControl = 4'b1010; // sll, slli
+              3'b010: 
+                if (opb5) ALUControl = 4'b1101; // ROTL (custom crypto, opcode bit5=0)
+                else ALUControl = 4'b0101; //slt,slti
+              3'b011: 
+                if (opb5) ALUControl = 4'b1110; // ROTR (custom crypto)
+                else ALUControl = 4'b0110; //sltu, sltui
+              3'b100: 
+                if (!opb5) ALUControl = 4'b1111; // RNG (custom crypto, opcode=0001011, bit5=0)
+                else ALUControl = 4'b0100; //xor
               3'b101: 
                 if (funct7b5) ALUControl = 4'b1011; //sra
                 else ALUControl = 4'b1100; // srl
-               
               3'b110: ALUControl = 4'b0011; //or,ori
               3'b111: ALUControl = 4'b0010; //and,andi
-              default: ALUControl = 4'bxxx; 
+              default: ALUControl = 4'b0000; 
             endcase
           2'b11: //ALUOp = 2'b11 and beyond
             case(funct3)

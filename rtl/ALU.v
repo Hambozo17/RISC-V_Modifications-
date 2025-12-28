@@ -47,6 +47,18 @@ module ALU(
    assign sltu = A < B; //for unsigned number comparison, this will give a boolean output (true - 1, false - 0)
    
 
+   // =========================================================================
+   // PHASE 3: CRYPTO EXTENSION - RNG (XOR-Shift LFSR)
+   // =========================================================================
+   reg [31:0] rng_state = 32'hDEADBEEF;  // LFSR seed
+   wire [31:0] rng_next;
+   
+   // XOR-Shift algorithm for pseudo-random number generation
+   // This produces a new random number each time RNG instruction executes
+   assign rng_next = rng_state ^ (rng_state << 13);
+   wire [31:0] rng_temp1 = rng_next ^ (rng_next >> 17);
+   wire [31:0] rng_temp2 = rng_temp1 ^ (rng_temp1 << 5);
+
    always@(*)
      case(ALUControl)
        4'b0000: ResultReg <= Sum; //add
@@ -57,17 +69,22 @@ module ALU(
        
        4'b0101: ResultReg <= {31'b0,slt}; //slt
        4'b0110: ResultReg <= {31'b0,sltu}; // sltu
-       4'b0111: ResultReg <= {A[31:12],12'b0}; //lui
+       4'b0111: ResultReg <= {A[31:12],12'b0}; //lui (alternate)
        4'b1000: ResultReg <= A + {B[31:12],12'b0}; // AUIPC
        4'b1001: ResultReg <= {B[31:12],12'b0}; // LUI
        
-       4'b1010: ResultReg <= A << B; // sll, slli
-       4'b1011: ResultReg <= A >>> B; // sra
-       4'b1100: ResultReg <= A >> B; // srl
+       4'b1010: ResultReg <= A << B[4:0]; // sll, slli
+       4'b1011: ResultReg <= A >>> B[4:0]; // sra
+       4'b1100: ResultReg <= A >> B[4:0]; // srl
        
-       //to add sll, slli,
-       //to add sra
-       default:  ResultReg <= 'bx;
+       // =====================================================================
+       // PHASE 3: CRYPTO EXTENSIONS
+       // =====================================================================
+       4'b1101: ResultReg <= (A << B[4:0]) | (A >> (32 - B[4:0])); // ROTL (Rotate Left)
+       4'b1110: ResultReg <= (A >> B[4:0]) | (A << (32 - B[4:0])); // ROTR (Rotate Right)
+       4'b1111: ResultReg <= rng_temp2; // RNG (Random Number Generator)
+       
+       default:  ResultReg <= 32'b0;
 
      endcase
 

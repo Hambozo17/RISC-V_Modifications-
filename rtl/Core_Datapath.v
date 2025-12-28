@@ -30,6 +30,8 @@ module Core_Datapath(
 		     input [3:0]   ALUControl,
 		     input [31:0]  Instr,
 		     input [31:0]  ReadData,
+		     input wire PCEn,
+
 
 		     output	   Zero,
 		     output [31:0] PC,
@@ -46,7 +48,8 @@ module Core_Datapath(
 	       .clk(clk),
 	       .reset(reset),
 	       .PCNext(PCnext),
-	       .PC(PC)
+	       .PC(PC),
+	       .PCEn(PCEn)
 	       );
    PC_Plus_4 PCPlus4_inst (
 			   .PC(PC),

@@ -26,13 +26,17 @@ module Single_Cycle_Core(
 			 input wire [31:0]  ReadData,
 			 output wire [31:0] PC,
 			 output wire 	    MemWrite,
-			 output wire [31:0] ALUResult,WriteData
+			 output wire [31:0] ALUResult,WriteData,
+			 output wire        HaltOut  // HALT status for external monitoring
 			 );
 
    wire 				    ALUSrc, RegWrite, Jump, Zero, PCSrc;
    wire [1:0] 				    ResultSrc,ImmSrc;
    wire [3:0] 				    ALUControl;
-
+   wire Halt;
+   wire PCEn;
+   assign PCEn = ~Halt;
+   assign HaltOut = Halt;  // Expose HALT status to top module
    Control_Unit Control(
 			.op(Instr[6:0]),
 			.funct3(Instr[14:12]),
@@ -45,7 +49,8 @@ module Single_Cycle_Core(
 			.RegWrite(RegWrite),
 			.Jump(Jump),
 			.ImmSrc(ImmSrc),
-			.ALUControl(ALUControl)
+			.ALUControl(ALUControl),
+			.Halt(Halt) 
 			);
 
    Core_Datapath Datapath(
@@ -62,7 +67,8 @@ module Single_Cycle_Core(
 			  .Zero(Zero),
 			  .PC(PC),
 			  .ALUResult(ALUResult),
-			  .WriteData(WriteData)
+			  .WriteData(WriteData),
+			    .PCEn(PCEn)
 			  );	
 
 endmodule
