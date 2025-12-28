@@ -148,7 +148,7 @@ All tests pass successfully:
 ## 📚 Course Information
 
 - **Course**: ECEN432 - Introduction to Computer Architecture
-- **University**: Ain Shams University
+- **University**: Nile University
 - **Faculty**: Faculty of Engineering - Electronics and Communications Dept.
 - **Supervisor**: Dr. Ahmed Soltan
 - **Teaching Assistant**: Eng. Silvana Atef
