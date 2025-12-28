@@ -4,7 +4,7 @@
 [![Verilog](https://img.shields.io/badge/HDL-Verilog-orange)](https://en.wikipedia.org/wiki/Verilog)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-A **Single-Cycle RISC-V Processor** with custom cryptographic extensions, developed for ECEN432 - Introduction to Computer Architecture at Ain Shams University.
+A **Single-Cycle RISC-V Processor** with custom cryptographic extensions, developed for ECEN432 - Introduction to Computer Architecture at NILE University.
 
 ## 🎯 Features
 
